@@ -40,11 +40,10 @@ const renderParrots = function (parrotArray) {
 
     const parrotsTemplate = document.querySelector("#parrots-template");
     const parrotItem = parrotsTemplate.content.cloneNode(true);
-
+    
     parrotItem.querySelector(".edit-button").setAttribute("data-id", id);
     parrotItem.querySelector(".delete-button").setAttribute("data-id", id);
 
-    document.querySelector("#edit-form").setAttribute("data-edit", id);
     parrotItem.querySelector(".card-title").textContent = title;
     parrotItem.querySelector(".parrot-img").src = img;
     parrotItem.querySelector(".parrot-w-h").textContent = price;
@@ -82,7 +81,7 @@ const refreshParrot = function () {
     })
 
     parrotWraper.append(parrotFragment);
-    // localStorageSet()
+    localStorageSet()
 
 }
 
@@ -155,21 +154,35 @@ addForm.addEventListener("submit", function (evt) {
         parrots.push(addParrot);
 
         refreshParrot()
+        localStorageSet()
 
         HideModal.hide()
         addForm.reset()
+        featuresOptions = []
     }
 
 });
 
-const editForm = addModal.querySelector("#edit-form");
-const editTitle = addModal.querySelector("#edit-parrot-title");
-const editImg = addModal.querySelector("#edit-parrot-img");
-const editPrice = addModal.querySelector("#edit-price");
-const editBirthDate = addModal.querySelector("#edit-parrot-date");
-const editWidth = addModal.querySelector("#edit-parrot__width");
-const editHeight = addModal.querySelector("#edit-parrot__height");
-const editFeatures = addModal.querySelector("#edit-features");
+const editForm = editModal.querySelector("#edit-form");
+const editTitle = editModal.querySelector("#edit-parrot-title");
+const editImg = editModal.querySelector("#edit-parrot-img");
+const editPrice = editModal.querySelector("#edit-price");
+const editBirthDate = editModal.querySelector("#edit-parrot-date");
+const editWidth = editModal.querySelector("#edit-parrot__width");
+const editHeight = editModal.querySelector("#edit-parrot__height");
+const editFeatures = editModal.querySelector("#edit-features");
+
+featuresOptions = []
+editFeatures.addEventListener("input", function () {
+    const featuersValue = editFeatures.value;
+    
+    const splited = featuersValue.trim().split(",");
+
+    if (splited.length == 2) {
+        featuresOptions.push(splited[0]);
+        editFeatures.value = "";
+    }
+});
 
 parrotWraper.addEventListener("click", function(evt){
     if (evt.target.matches(".delete-button")) {
@@ -182,21 +195,75 @@ parrotWraper.addEventListener("click", function(evt){
         showParrot.splice(deleteIndex, 1)
         parrots.splice(deleteIndex, 1);
 
+        localStorageSet()
+
         refreshParrot()
     } else if (evt.target.matches(".edit-button")) {
         const clickedItemId = +evt.target.dataset.id
-
+        
+        
         const editIndex = parrots.findIndex(function(index){
             return index.id === clickedItemId;
         });
 
-        const editFormIndex = +evt.target.dataset.edit;
-        console.log(editFormIndex);
+        document.querySelector("#edit-form").setAttribute("data-edit-id", clickedItemId);
+        
         const editFormElements = showParrot.find(function(index){
-            return editFormIndex === index.id
+            return clickedItemId === index.id
         });
+        
+        editTitle.value = editFormElements.title;
+        editImg.value = editFormElements.img;
+        editPrice.value = editFormElements.price;
+        editBirthDate.value = editFormElements.birthDate;
+        editWidth.value = editFormElements.sizes.width;
+        editHeight.value = editFormElements.sizes.height;
+    }
+});
 
-        console.log(editFormIndex);
+editForm.addEventListener("submit", function(evt){
+    evt.preventDefault()
+
+    const editTitleValue = editTitle.value;
+    const editImgValue = editImg.value
+    const editPriceValue = editPrice.value;
+    const editBirthDateValue = editBirthDate.value;
+    const editWidthValue = editWidth.value;
+    const editHeightValue = editHeight.value;
+
+    const editHasFeatures = featuresOptions.length !== 0;
+
+    if (editTitleValue.trim() && editImgValue.trim() && editPriceValue.trim() && editBirthDateValue.trim() && editWidthValue.trim() && editHeightValue.trim() && editHasFeatures) {
+        const editFormId = +evt.target.dataset.editId;
+
+        const editFormIndex = parrots.findIndex(function(editForm){
+            return editForm.id === editFormId;
+        })
+
+        const editParrot = {
+            id: editFormId,
+            title: editTitleValue,
+            img: editImgValue,
+            price: editPriceValue,
+            birthDate: editBirthDateValue,
+            sizes: {
+                width: editWidthValue,
+                height: editHeightValue
+            },
+            isFavorite: false,
+            features: featuresOptions.toLocaleString(",")
+        }
+
+        showParrot.splice(editFormIndex, 1, editParrot);
+        parrots.splice(editFormIndex, 1, editParrot);
+        refreshParrot()
+
+        localStorageSet();
+        editForm.reset();
+
+        editHideModal.hide();
+
         
     }
+    featuresOptions = []
 })
