@@ -26,6 +26,12 @@ const localStorageSet = function () {
     return lStorage
 }
 
+const showDate = function(datestring){
+    const date = new Date(datestring)
+
+    return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+}
+
 
 const renderParrots = function (parrotArray) {
     const {
@@ -33,6 +39,7 @@ const renderParrots = function (parrotArray) {
         title,
         img,
         birthDate,
+        price,
         sizes,
         isFavorite,
         features
@@ -40,15 +47,15 @@ const renderParrots = function (parrotArray) {
 
     const parrotsTemplate = document.querySelector("#parrots-template");
     const parrotItem = parrotsTemplate.content.cloneNode(true);
-    
+
     parrotItem.querySelector(".edit-button").setAttribute("data-id", id);
     parrotItem.querySelector(".delete-button").setAttribute("data-id", id);
 
     parrotItem.querySelector(".card-title").textContent = title;
     parrotItem.querySelector(".parrot-img").src = img;
-    parrotItem.querySelector(".parrot-w-h").textContent = price;
+    parrotItem.querySelector(".parrot-price").textContent = `$${price}`;
     parrotItem.querySelector(".parrot-w-h").textContent = `${sizes.width}sm x ${sizes.height}sm`;
-    parrotItem.querySelector(".birth-date").textContent = birthDate;
+    parrotItem.querySelector(".birth-date").textContent = showDate(birthDate);
 
     const featuresList = parrotItem.querySelector(".features-list");
 
@@ -66,7 +73,7 @@ const renderParrots = function (parrotArray) {
 
 }
 
-const showParrot = parrots.slice()
+let showParrot = parrots.slice()
 const parrotCount = document.querySelector(".parrots-count");
 
 const refreshParrot = function () {
@@ -110,7 +117,7 @@ const addFeatures = addModal.querySelector("#features");
 featuresOptions = []
 addFeatures.addEventListener("input", function () {
     const featuersValue = addFeatures.value;
-    
+
     const splited = featuersValue.trim().split(",");
 
     if (splited.length == 2) {
@@ -122,9 +129,9 @@ addFeatures.addEventListener("input", function () {
 
 
 addForm.addEventListener("submit", function (evt) {
-    
+
     evt.preventDefault()
-    
+
     const titleValue = addTitle.value;
     const imgValue = addImg.value;
     const priceValue = addPrice.value;
@@ -133,7 +140,7 @@ addForm.addEventListener("submit", function (evt) {
     const heightValue = addHeight.value;
 
     const hasFeatures = featuresOptions.length !== 0;
-    
+
     if (titleValue.trim() && imgValue && priceValue.trim() && BirthValue && widthValue.trim() && heightValue.trim() && hasFeatures) {
         const addParrot = {
             id: Math.floor(Math.random() * 100),
@@ -175,7 +182,7 @@ const editFeatures = editModal.querySelector("#edit-features");
 featuresOptions = []
 editFeatures.addEventListener("input", function () {
     const featuersValue = editFeatures.value;
-    
+
     const splited = featuersValue.trim().split(",");
 
     if (splited.length == 2) {
@@ -184,11 +191,11 @@ editFeatures.addEventListener("input", function () {
     }
 });
 
-parrotWraper.addEventListener("click", function(evt){
+parrotWraper.addEventListener("click", function (evt) {
     if (evt.target.matches(".delete-button")) {
         const clickedItemId = +evt.target.dataset.id
 
-        const deleteIndex = parrots.findIndex(function(index){
+        const deleteIndex = parrots.findIndex(function (index) {
             return index.id == clickedItemId
         })
 
@@ -200,18 +207,18 @@ parrotWraper.addEventListener("click", function(evt){
         refreshParrot()
     } else if (evt.target.matches(".edit-button")) {
         const clickedItemId = +evt.target.dataset.id
-        
-        
-        const editIndex = parrots.findIndex(function(index){
+
+
+        const editIndex = parrots.findIndex(function (index) {
             return index.id === clickedItemId;
         });
 
         document.querySelector("#edit-form").setAttribute("data-edit-id", clickedItemId);
-        
-        const editFormElements = showParrot.find(function(index){
+
+        const editFormElements = showParrot.find(function (index) {
             return clickedItemId === index.id
         });
-        
+
         editTitle.value = editFormElements.title;
         editImg.value = editFormElements.img;
         editPrice.value = editFormElements.price;
@@ -221,7 +228,7 @@ parrotWraper.addEventListener("click", function(evt){
     }
 });
 
-editForm.addEventListener("submit", function(evt){
+editForm.addEventListener("submit", function (evt) {
     evt.preventDefault()
 
     const editTitleValue = editTitle.value;
@@ -236,7 +243,7 @@ editForm.addEventListener("submit", function(evt){
     if (editTitleValue.trim() && editImgValue.trim() && editPriceValue.trim() && editBirthDateValue.trim() && editWidthValue.trim() && editHeightValue.trim() && editHasFeatures) {
         const editFormId = +evt.target.dataset.editId;
 
-        const editFormIndex = parrots.findIndex(function(editForm){
+        const editFormIndex = parrots.findIndex(function (editForm) {
             return editForm.id === editFormId;
         })
 
@@ -263,7 +270,48 @@ editForm.addEventListener("submit", function(evt){
 
         editHideModal.hide();
 
-        
+
     }
     featuresOptions = []
+});
+
+const filter = document.querySelector("#filter");;
+
+filter.addEventListener("submit", function (evt) {
+    evt.preventDefault();
+
+    const elements = evt.target.elements;
+    const search = elements.search;
+    const fromPrice = elements.from;
+    const toPrice = elements.to;
+    const fromWidth = elements.from_width;
+    const toWidth = elements.to_width;
+    const fromHeight = elements.from_height;
+    const toHeight = elements.to_height;
+
+    // values
+    const searchValue = search.value;
+    const fromPriceValue = fromPrice.value;
+    const toPriceValue = toPrice.value;
+    const fromWidthValue = fromWidth.value;
+    const toWidthValue = toWidth.value;
+    const fromHeightValue = fromHeight.value;
+    const toHeightValue = toHeight.value;
+
+    showParrot = parrots.filter(function (parot) {
+        const searchRegExp = new RegExp(searchValue, "gi");
+
+        const parrotPrice = Math.round(parot.price);
+        const parrotWidth = Math.round(parot.sizes.width);
+        const parrotHeight = Math.round(parot.sizes.height);
+
+
+        const ifToPrice = !toPriceValue ? true : parrotPrice <= toPriceValue;
+        const ifToWidth = !toWidthValue ? true : parrotWidth <= toWidthValue;
+        const ifToHeight = !toHeightValue ? true : parrotHeight <= toHeightValue;
+
+        return parrotPrice >= fromPriceValue && ifToPrice && parrotWidth >= fromWidthValue && ifToWidth && parrotHeight >= fromHeightValue && ifToHeight && parot.title.match(searchRegExp);
+    })
+
+    refreshParrot()
 })

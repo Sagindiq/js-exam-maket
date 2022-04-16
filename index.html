@@ -24,7 +24,7 @@
     <div class="row mt-5">
       <div class="col-3">
         <h2 class="h4 mb-4">Filter</h2>
-        <form action="#">
+        <form action="#" id="filter">
           <div class="mb-3">
             <label for="search" class="form-label">Search</label>
             <input type="search" class="form-control" id="search" placeholder="Falonchi">
@@ -169,7 +169,7 @@
             </div>
             <div class="mb-3">
               <label for="parrot-date" class="form-label">Birth date</label>
-              <input type="date" class="form-control" id="parrot-date" placeholder="12.02.2022">
+              <input type="date" required class="form-control" id="parrot-date" placeholder="12.02.2022">
             </div>
 
             <div class="mb-3">
@@ -210,31 +210,31 @@
           <form id="edit-form">
             <div class="mb-3">
               <label for="parrot-title" class="form-label">Title</label>
-              <input type="text" class="form-control" id="edit-parrot-title" placeholder="Kakatu">
+              <input type="text" required class="form-control" id="edit-parrot-title" placeholder="Kakatu">
               <!--input type search bop qolibdi-->
             </div>
             <div class="mb-3">
               <label for="parrot-img" class="form-label">Img URL</label>
-              <input type="text" class="form-control" id="edit-parrot-img" placeholder="https://...">
+              <input type="text" required class="form-control" id="edit-parrot-img" placeholder="https://...">
             </div>
             <div class="mb-3">
               <label for="price" class="form-label">Price ($)</label>
-              <input type="number" class="form-control" id="edit-price" placeholder="1000">
+              <input type="number" required class="form-control" id="edit-price" placeholder="1000">
             </div>
             <div class="mb-3">
               <label for="parrot-date" class="form-label">Birth date</label>
-              <input type="date" class="form-control" id="edit-parrot-date" placeholder="12.02.2022">
+              <input type="date" required class="form-control" id="edit-parrot-date" placeholder="12.02.2022">
             </div>
 
             <div class="mb-3">
               <label class="form-label">Width and Height</label>
               <div class="row">
                 <div class="col-6">
-                  <input type="number" class="form-control" id="edit-parrot__width" min="0" aria-label="Parrot width"
+                  <input type="number" required class="form-control" id="edit-parrot__width" min="0" aria-label="Parrot width"
                     placeholder="Parrot width">
                 </div>
                 <div class="col-6">
-                  <input type="number" class="form-control" id="edit-parrot__height" min="0" aria-label="Parrot height"
+                  <input type="number" required class="form-control" id="edit-parrot__height" min="0" aria-label="Parrot height"
                     placeholder="Parrot height">
                 </div>
               </div>
