@@ -1,5 +1,4 @@
-// localStorage.getItem("parrots") ? JSON.parse(localStorage.getItem("parrots")) : 
-const parrots = [
+const parrots = localStorage.getItem("parrots") ? JSON.parse(localStorage.getItem("parrots")) :  [
   {
     id: 1,
     title: "Hyacinth macaw",
