@@ -1,4 +1,4 @@
-const products = [
+const parrots = [
   {
     id: 1,
     title: "Hyacinth macaw",
