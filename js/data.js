@@ -43,3 +43,5 @@ const parrots = localStorage.getItem("parrots") ? JSON.parse(localStorage.getIte
 const favorites = [
   
 ];
+
+let fCount = ""

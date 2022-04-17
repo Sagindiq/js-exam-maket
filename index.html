@@ -135,11 +135,8 @@
       <section class="col-3">
         <h2 class="h4 mb-4">Favorite parrots</h2>
 
-        <ul class="list-unstyled">
-          <li class="card p-3 mb-2">
-            <h3 class="card-title h5 mb-2">Qizil Ara</h3>
-            <button class="btn btn-danger btn-sm d-inline" style="width: fit-content" type="button">Remove</button>
-          </li>
+        <ul class="list-unstyled favorite__list">
+          
         </ul>
       </section>
     </div>
@@ -273,8 +270,8 @@
 
           <div class="position-absolute top-0 end-0 d-flex">
             <!-- Agar isFavorite false bo'ladigan bo'lsa i'ning classi "fa-solid fa-star" bo'lishi kerak. Agar unday bo'lmasa "fa fa-star-o" -->
-            <button class="btn rounded-0 btn-success">
-              <i class="fa fa-star-o" style="color: yellow; pointer-events: none;"></i>
+            <button class="btn rounded-0 btn-success favorite-button">
+              <i class="fa fa-star-o favorite-star-img" style="color: yellow; pointer-events: none;"></i>
             </button>
 
             <button class="btn rounded-0 btn-secondary edit-button" data-bs-toggle="modal" data-bs-target="#edit-parrot-modal">
@@ -289,6 +286,16 @@
     </li>
 
   </template>
+
+  <!-- <template id="favorite-template">
+
+    
+    <li class="card p-3 mb-2">
+      <h3 class="card-title h5 mb-2">Qizil Ara</h3>
+      <button class="btn btn-danger btn-sm d-inline" style="width: fit-content" type="button">Remove</button>
+    </li>
+
+  </template> -->
 
   <script src="js/bootstrap.bundle.min.js"></script>
 

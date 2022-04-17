@@ -1,4 +1,5 @@
 const parrotWraper = document.querySelector(".parrots-wrapper");
+const favoriteList = document.querySelector(".favorite__list");
 
 //add element
 
@@ -26,11 +27,45 @@ const localStorageSet = function () {
     return lStorage
 }
 
-const showDate = function(datestring){
+const showDate = function (datestring) {
     const date = new Date(datestring)
 
     return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
 }
+
+// const renderFavorite = function (favoriteArray) {
+
+//     // const favoriteStar = document.querySelector(".favorite-star-img");
+//     // favoriteStar.className = "fa-solid fa-star favorite-star-img";
+
+//     // parrots.forEach(function(parrot){
+//     //     if (parrot.is) {
+
+//     //     }
+//     // })
+
+
+//     favorites.forEach(function (favorite) {
+
+//         const favoriteItem = addElement("li", "card p-3 mb-2");
+//         const favoriteTitle = addElement("h3", "card-title h5 mb-2", favorite.name);
+//         const favoriteDelBtn = addElement("button", "btn btn-danger btn-sm d-inline", "Remove");
+//         favoriteDelBtn.style = "width: fit-content";
+//         favoriteDelBtn.type = "button";
+//     })
+
+// }
+
+// renderFavorite()
+
+// const refreshFavorite = function() {
+
+//     parrots.forEach(function(parrot){
+//         if (parrot.isFavorite == true) {
+//             console.log("ishladi");
+//         }
+//     })
+// }
 
 
 const renderParrots = function (parrotArray) {
@@ -50,6 +85,7 @@ const renderParrots = function (parrotArray) {
 
     parrotItem.querySelector(".edit-button").setAttribute("data-id", id);
     parrotItem.querySelector(".delete-button").setAttribute("data-id", id);
+    parrotItem.querySelector(".favorite-button").setAttribute("data-favorite-id", id);
 
     parrotItem.querySelector(".card-title").textContent = title;
     parrotItem.querySelector(".parrot-img").src = img;
@@ -225,7 +261,71 @@ parrotWraper.addEventListener("click", function (evt) {
         editBirthDate.value = editFormElements.birthDate;
         editWidth.value = editFormElements.sizes.width;
         editHeight.value = editFormElements.sizes.height;
+
+    } else if (evt.target.matches(".favorite-button")) {
+        const favoriteId = +evt.target.dataset.favoriteId;
+
+        const favoriteIndex = parrots.findIndex(function (index) {
+            return index.id === favoriteId;
+        });
+
+        const parrotCheck = parrots[favoriteIndex]
+        if (parrots[favoriteIndex].isFavorite == false) {
+
+            parrotCheck.isFavorite = true;
+
+
+        //     if (favorites.length < 1) {
+        //         favorites.push({
+        //         id: favorites.length,
+        //         title: parrotCheck.title,
+        //     });
+        //     } else if (favorites.length) {
+                
+        //     }
+
+        //     // if (favorites.length == 0) {
+        //     //     favorites.push({
+        //     //     id: favorites.length,
+        //     //     title: parrotCheck.title,
+        //     // });
+        //     // } else if (favorites.length == favorites) {
+        //     //     favorites.push({
+        //     //     id: favorites.length, 
+        //     //     title: parrotCheck.title,
+        //     // });
+        //     // fCount = favorites.length
+        //     // } else if (favorites.length > fCount) {
+        //     //    favorites.push({
+        //     //     id: favorites.length,
+        //     //     title: parrotCheck.title,
+        //     // });
+        //     // }
+
+        //     alert(`${parrotCheck.title} added to favorite`)
+        //     console.log(favoriteIndex);
+
+        // } else if (parrots[favoriteIndex].isFavorite == true) {
+
+        //     parrotCheck.isFavorite = false;
+
+
+        //     alert(`${parrotCheck.title} deleted in favorites`)
+        //     if (favorites.length == 1) {
+        //         favorites.splice(0, 1);
+
+        //     } else if (favorites.length >= 1) {
+        //         favorites.splice(favoriteIndex, 1);
+        //         console.log(favorites[favoriteIndex.id]);
+        //     }
+        // }
+
+        // refreshParrot()
+
+        // localStorageSet()
+
     }
+}
 });
 
 editForm.addEventListener("submit", function (evt) {
